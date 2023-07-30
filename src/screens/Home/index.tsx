@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,8 +6,13 @@ import { Participant } from '../../components/Participant';
 
 import { styles } from './styles';
 
+interface ParticipantsList {
+  id: string;
+  name: string;
+}
+
 export default function Home() {
-  const participants = [
+  const participants: Array<ParticipantsList> = [
     { id: uuidv4(), name: "Miguel" },
     { id: uuidv4(), name: "John Doe" },
     { id: uuidv4(), name: "Jane Doe" },
@@ -47,16 +52,20 @@ export default function Home() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {
-          participants.map((participant) => (
-            <Participant
-              key={participant.id}
-              name={participant.name}
-              onRemove={() => handleParticipantRemove(participant.name)} />
-          ))
-        }
-      </ScrollView>
+      <FlatList
+        data={participants}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Participant
+            key={item.id}
+            name={item.name}
+            onRemove={() => handleParticipantRemove(item.name)} />
+        )}
+        ListEmptyComponent={() => (
+          <Text style={styles.emptyListText}>Nenhum participante adicionado.</Text>
+        )}
+      />
+
     </View>
   );
 }
