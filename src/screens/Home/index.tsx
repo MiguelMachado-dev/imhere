@@ -1,11 +1,26 @@
 import { Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Participant } from '../../components/Participant';
 
 import { styles } from './styles';
 
 export default function Home() {
-  const participants = ["Miguel", "John Doe", "Jane Doe", "Foo Bar", "Lorem Ipsum", "Ana", "Maria", "João", "José", "Pedro", "Paulo", "Lucas"];
+  const participants = [
+    { id: uuidv4(), name: "Miguel" },
+    { id: uuidv4(), name: "John Doe" },
+    { id: uuidv4(), name: "Jane Doe" },
+    { id: uuidv4(), name: "Foo Bar" },
+    { id: uuidv4(), name: "Lorem Ipsum" },
+    { id: uuidv4(), name: "Ana" },
+    { id: uuidv4(), name: "Maria" },
+    { id: uuidv4(), name: "João" },
+    { id: uuidv4(), name: "José" },
+    { id: uuidv4(), name: "Pedro" },
+    { id: uuidv4(), name: "Paulo" },
+    { id: uuidv4(), name: "Lucas" },
+  ];
 
   const handleParticipantAdd = () => {
     console.log('Adicionando participante');
@@ -36,9 +51,9 @@ export default function Home() {
         {
           participants.map((participant) => (
             <Participant
-              key={participant}
-              name={participant}
-              onRemove={() => handleParticipantRemove(participant)} />
+              key={participant.id}
+              name={participant.name}
+              onRemove={() => handleParticipantRemove(participant.name)} />
           ))
         }
       </ScrollView>
