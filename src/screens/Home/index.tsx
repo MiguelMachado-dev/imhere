@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, FlatList, Alert } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,10 +28,25 @@ export default function Home() {
   ];
 
   const handleParticipantAdd = () => {
-    console.log('Adicionando participante');
+    const newParticipantName = 'Miguel'
+    const nameExists = participants.some((participant) => participant.name === newParticipantName);
+    if (nameExists) {
+      return Alert.alert('Ops!', 'Esse participante já foi adicionado.');
+    }
+    console.log(`Adicionando participante: ${newParticipantName}`);
   }
 
   const handleParticipantRemove = (name: string) => {
+    Alert.alert('Remover participante', `Deseja remover ${name}?`, [
+      {
+        text: 'Não',
+        style: 'cancel'
+      },
+      {
+        text: 'Sim',
+        onPress: () => Alert.alert('Removido!', `${name} foi removido.`)
+      }
+    ])
     console.log(`Removendo participante: ${name}`);
   }
 
