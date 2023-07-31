@@ -1,6 +1,8 @@
 import { Text, View, TextInput, TouchableOpacity, FlatList, Alert } from 'react-native';
-import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import { polyfillWebCrypto } from "expo-standard-web-crypto";
+
+polyfillWebCrypto();
 
 import { Participant } from '../../components/Participant';
 
