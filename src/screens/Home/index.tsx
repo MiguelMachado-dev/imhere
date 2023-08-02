@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Text, View, TextInput, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
 import { polyfillWebCrypto } from "expo-standard-web-crypto";
@@ -14,28 +15,17 @@ interface ParticipantsList {
 }
 
 export default function Home() {
-  const participants: Array<ParticipantsList> = [
-    { id: uuidv4(), name: "Miguel" },
-    { id: uuidv4(), name: "John Doe" },
-    { id: uuidv4(), name: "Jane Doe" },
-    { id: uuidv4(), name: "Foo Bar" },
-    { id: uuidv4(), name: "Lorem Ipsum" },
-    { id: uuidv4(), name: "Ana" },
-    { id: uuidv4(), name: "Maria" },
-    { id: uuidv4(), name: "João" },
-    { id: uuidv4(), name: "José" },
-    { id: uuidv4(), name: "Pedro" },
-    { id: uuidv4(), name: "Paulo" },
-    { id: uuidv4(), name: "Lucas" },
-  ];
+  const [participants, setParticipants] = useState<Array<ParticipantsList>>([]);
+  const [newParticipant, setNewParticipant] = useState<string>('');
 
   const handleParticipantAdd = () => {
-    const newParticipantName = 'Miguel'
-    const nameExists = participants.some((participant) => participant.name === newParticipantName);
+    const nameExists = participants.some((participant) => participant.name === newParticipant);
     if (nameExists) {
       return Alert.alert('Ops!', 'Esse participante já foi adicionado.');
     }
-    console.log(`Adicionando participante: ${newParticipantName}`);
+
+    setParticipants(prevState => [...prevState, { id: uuidv4(), name: newParticipant }]);
+    setNewParticipant('');
   }
 
   const handleParticipantRemove = (name: string) => {
@@ -46,7 +36,7 @@ export default function Home() {
       },
       {
         text: 'Sim',
-        onPress: () => Alert.alert('Removido!', `${name} foi removido.`)
+        onPress: () => setParticipants(prevState => prevState.filter((participant) => participant.name !== name))
       }
     ])
     console.log(`Removendo participante: ${name}`);
@@ -62,6 +52,8 @@ export default function Home() {
           style={styles.input}
           placeholder='Nome do participante'
           placeholderTextColor="#6B6B6B"
+          onChangeText={setNewParticipant}
+          value={newParticipant}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleParticipantAdd}>
